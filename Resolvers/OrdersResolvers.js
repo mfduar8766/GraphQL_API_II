@@ -22,8 +22,6 @@ const getOrders = async () => {
 
 const getOrderById = async (parent, args) => {
   const { _id } = args;
-  console.log("ORDER BY ID PARENT", parent);
-  console.log("ORDER BY ID ARGS", args);
   try {
     const order = await OrderModel.findById(_id);
     if (!order) {
@@ -52,8 +50,35 @@ const addNewOrder = async (parent, args) => {
   }
 };
 
+const editOrder = async (parentValue, args) => {
+  const { _id, name, price } = args;
+  try {
+    const order = await OrderModel.findByIdAndUpdate({
+      id: _id,
+      update: { name, price }
+    });
+    return order;
+  } catch (error) {
+    return errorMessage(500, "Could not update customer.");
+  }
+};
+
+const deleteOrder = async (parentValue, args) => {
+  const { _id } = args;
+  try {
+    const deleteOrder = await OrderModel.findByIdAndDelete(_id);
+    const deleteCustomer = await CustomerModel.findByIdAndDelete(_id);
+    return { deleteOrder, deleteCustomer };
+  } catch (error) {
+    return errorMessage(500, "Could not delete customer.");
+  }
+};
+
+
 module.exports = {
   getOrders,
   getOrderById,
   addNewOrder,
+  editOrder,
+  deleteOrder
 };

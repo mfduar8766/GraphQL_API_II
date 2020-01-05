@@ -4,13 +4,17 @@ const {
   GraphQLInt,
   GraphQLNonNull
 } = require("../graphQLTypes");
-const { CustomerType, OrderType } = require('../Types/index');
+const { CustomerType, OrderType } = require("../Types/index");
 const {
   addNewCustomer,
   editCustomer,
   deleteCustomer
 } = require("../Resolvers/CustomerResolvers");
-const { addNewOrder } = require("../Resolvers/OrdersResolvers");
+const {
+  addNewOrder,
+  editOrder,
+  deleteOrder
+} = require("../Resolvers/OrdersResolvers");
 
 const Mutations = new GraphQLObjectType({
   name: "Mutation",
@@ -27,7 +31,7 @@ const Mutations = new GraphQLObjectType({
     editCustomerById: {
       type: CustomerType,
       args: {
-        id: { type: new GraphQLNonNull(GraphQLString) },
+        _id: { type: new GraphQLNonNull(GraphQLString) },
         name: { type: GraphQLString },
         email: { type: GraphQLString },
         age: { type: GraphQLInt }
@@ -37,7 +41,7 @@ const Mutations = new GraphQLObjectType({
     deleteCustomerById: {
       type: CustomerType,
       args: {
-        id: { type: new GraphQLNonNull(GraphQLString) }
+        _id: { type: new GraphQLNonNull(GraphQLString) }
       },
       resolve: (parentValue, args) => deleteCustomer(parentValue, args)
     },
@@ -49,6 +53,22 @@ const Mutations = new GraphQLObjectType({
         customerId: { type: new GraphQLNonNull(GraphQLString) }
       },
       resolve: (parent, args) => addNewOrder(parent, args)
+    },
+    editOrderById: {
+      type: OrderType,
+      args: {
+        _id: { type: new GraphQLNonNull(GraphQLString) },
+        name: { type: GraphQLString },
+        price: { type: GraphQLInt }
+      },
+      resolve: (parent, args) => editOrder(parent, args)
+    },
+    deleteOrderById: {
+      type: OrderType,
+      args: {
+        _id: { type: new GraphQLNonNull(GraphQLString) }
+      },
+      resolve: (parentValue, args) => deleteOrder(parentValue, args)
     }
   })
 });
