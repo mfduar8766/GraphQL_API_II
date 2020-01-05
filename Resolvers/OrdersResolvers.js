@@ -56,5 +56,4 @@ module.exports = {
   getOrders,
   getOrderById,
   addNewOrder,
-  getOrdersRelatedToCustomers
 };
