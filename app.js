@@ -5,7 +5,7 @@ const cors = require("cors");
 const PORT = process.env.PORT || 5000;
 const schema = require("./schema");
 const mongoose = require('mongoose');
-const mongoURI = require('./mongoURI');
+const mongoURI = require("./mongoURI");
 const app = express();
 
 mongoose.connect(process.env.MONGODB_URI || mongoURI, {
