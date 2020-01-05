@@ -1,9 +1,18 @@
-const { mongoose, CustomerModel } = require("../globalImports");
+const { mongoose, CustomerModel, OrderModel } = require("../globalImports");
 const errorMessage = (status, message) => ({ status, message });
 
 const getCustomers = async () => {
   try {
-    const customers = await CustomerModel.find();
+    const customers = await CustomerModel.aggregate([
+      {
+        $lookup: {
+          from: OrderModel.collection.name,
+          localField: "customerId",
+          foreignField: "customerId",
+          as: "orders"
+        }
+      },
+    ]);
     return customers;
   } catch (error) {
     return errorMessage(500, "Error getting customers.");
@@ -11,9 +20,9 @@ const getCustomers = async () => {
 };
 
 const getCustomerById = async (parentValue, args) => {
-  const { id } = args;
+  const { _id } = args;
   try {
-    const customer = await CustomerModel.findById(id);
+    const customer = await CustomerModel.findById(_id);
     if (!customer) {
       return errorMessage(500, 'No customer found.');
     }
@@ -41,10 +50,10 @@ const addNewCustomer = async (parentValue, args) => {
 };
 
 const editCustomer = async (parentValue, args) => {
-  const { id, name, email, age } = args;
+  const { _id, name, email, age } = args;
   try {
     const customer = await CustomerModel.findByIdAndUpdate({
-      id: id,
+      id: _id,
       update: { name, email, age }
     });
     return customer;
@@ -54,9 +63,9 @@ const editCustomer = async (parentValue, args) => {
 };
 
 const deleteCustomer = async (parentValue, args) => {
-  const { id } = args;
+  const { _id } = args;
   try {
-    const deleteCustomer = await CustomerModel.findByIdAndDelete(id);
+    const deleteCustomer = await CustomerModel.findByIdAndDelete(_id);
     return deleteCustomer;
   } catch (error) {
     return errorMessage(500, "Could not delete customer.");

@@ -5,7 +5,7 @@ const {
   GraphQLInt,
   GraphQLList,
   GraphQLString,
-  GraphQLNonNull
+  GraphQLNonNull,
 } = require("graphql");
 
 module.exports = {
