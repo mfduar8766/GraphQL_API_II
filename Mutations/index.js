@@ -4,12 +4,13 @@ const {
   GraphQLInt,
   GraphQLNonNull
 } = require("../graphQLTypes");
-const CustomerType = require("../Types/Customers");
+const { CustomerType, OrderType } = require('../Types/index');
 const {
   addNewCustomer,
   editCustomer,
   deleteCustomer
 } = require("../Resolvers/CustomerResolvers");
+const { addNewOrder } = require("../Resolvers/OrdersResolvers");
 
 const Mutations = new GraphQLObjectType({
   name: "Mutation",
@@ -39,6 +40,15 @@ const Mutations = new GraphQLObjectType({
         id: { type: new GraphQLNonNull(GraphQLString) }
       },
       resolve: (parentValue, args) => deleteCustomer(parentValue, args)
+    },
+    addOrder: {
+      type: OrderType,
+      args: {
+        name: { type: GraphQLString },
+        price: { type: GraphQLInt },
+        customerId: { type: new GraphQLNonNull(GraphQLString) }
+      },
+      resolve: (parent, args) => addNewOrder(parent, args)
     }
   })
 });

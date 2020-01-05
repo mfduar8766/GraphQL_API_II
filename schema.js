@@ -5,12 +5,13 @@ const {
   GraphQLString,
   GraphQLNonNull
 } = require("./graphQLTypes");
+const { CustomerType, OrderType } = require("./Types/index");
 const {
   getCustomers,
   getCustomerById
 } = require("./Resolvers/CustomerResolvers");
-const CustomerType = require("./Types/Customers");
-const mutation = require("./Mutations/Mutations");
+const { getOrders } = require("./Resolvers/OrdersResolvers");
+const mutation = require("./Mutations/index");
 
 const RootQuery = new GraphQLObjectType({
   name: "RootQueryType",
@@ -22,9 +23,20 @@ const RootQuery = new GraphQLObjectType({
     customerById: {
       type: CustomerType,
       args: {
-        id: { type: new GraphQLNonNull(GraphQLString) }
+        _id: { type: new GraphQLNonNull(GraphQLString) }
       },
-      resolve: (parentValue, args) => getCustomerById(parentValue, args)
+      resolve: (parent, args) => getCustomerById(parent, args)
+    },
+    orders: {
+      type: new GraphQLList(OrderType),
+      resolve: () => getOrders()
+    },
+    orderById: {
+      type: OrderType,
+      args: {
+        _id: { type: new GraphQLNonNull(GraphQLString) }
+      },
+      resolve: (parent, args) => getOrderById(parent, args)
     }
   })
 });

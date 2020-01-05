@@ -1,8 +1,10 @@
 const {
   GraphQLObjectType,
   GraphQLString,
-  GraphQLInt
+  GraphQLInt,
+  GraphQLList
 } = require("../graphQLTypes");
+const OrderType = require("./Orders");
 
 const CustomerType = new GraphQLObjectType({
   name: "Customer",
@@ -10,7 +12,8 @@ const CustomerType = new GraphQLObjectType({
     id: { type: GraphQLString },
     name: { type: GraphQLString },
     email: { type: GraphQLString },
-    age: { type: GraphQLInt }
+    age: { type: GraphQLInt },
+    orders: { type: new GraphQLList(OrderType) }
   })
 });
 
