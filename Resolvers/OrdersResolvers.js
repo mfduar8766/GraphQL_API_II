@@ -20,26 +20,6 @@ const getOrders = async () => {
   }
 };
 
-const getOrdersRelatedToCustomers = async id => {
-  console.log("IDDDD", id);
-  try {
-    const orders = await CustomerModel.aggregate([
-      {
-        $lookup: {
-          from: OrderModel.collection.name,
-          localField: "customerId",
-          foreignField: "customerId",
-          as: "orders"
-        }
-      },
-      { $match: { customerId: id } }
-    ]);
-    return orders;
-  } catch (error) {
-    return errorMessage(500, "Could not get orders.");
-  }
-};
-
 const getOrderById = async (parent, args) => {
   const { _id } = args;
   console.log("ORDER BY ID PARENT", parent);
