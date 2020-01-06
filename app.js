@@ -20,7 +20,7 @@ mongoose.connection.once("open", () => {
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(
+app.use('/graphql',
   GraphQLHTTP({
     schema,
     graphiql: true
