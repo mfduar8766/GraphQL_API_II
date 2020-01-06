@@ -5,13 +5,13 @@ const cors = require("cors");
 const PORT = process.env.PORT || 5000;
 const schema = require("./schema");
 const mongoose = require('mongoose');
-const mongoURI = require("./config");
+const mongoURI = require("./config").MONGODB_URI;
 const app = express();
 
-mongoose.connect(process.env.MONGODB_URI || mongoURI, {
+mongoose.connect(mongoURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
-});
+}).catch(error => console.log('Error', error));
 
 mongoose.connection.once("open", () => {
   console.log("connected to DB.");
