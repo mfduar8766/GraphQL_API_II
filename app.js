@@ -8,10 +8,10 @@ const mongoose = require('mongoose');
 const mongoURI = require("./config").MONGODB_URI;
 const app = express();
 
-mongoose.connect(mongoURI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-}).catch(error => console.log('Error', error));
+const options = { server: { socketOptions: { keepAlive: 300000, connectTimeoutMS: 30000 } }, 
+                replset: { socketOptions: { keepAlive: 300000, connectTimeoutMS : 30000 } } };       
+
+mongoose.connect(mongoURI, options).catch(error => console.log('Error', error));
 
 mongoose.connection.once("open", () => {
   console.log("connected to DB.");
@@ -20,7 +20,7 @@ mongoose.connection.once("open", () => {
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use('/graphql',
+app.use('/',
   GraphQLHTTP({
     schema,
     graphiql: true
