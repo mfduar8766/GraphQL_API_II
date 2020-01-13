@@ -13,7 +13,10 @@ const options = {
   replset: { socketOptions: { keepAlive: 300000, connectTimeoutMS: 30000 } }
 };
 
-mongoose.connect(mongoURI, options).catch(error => console.log("Error", error));
+mongoose.connect(mongoURI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+}).catch(error => console.log('Error', error));
 
 mongoose.connection.once("open", () => {
   console.log("connected to DB.");
