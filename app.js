@@ -8,11 +8,6 @@ const mongoose = require("mongoose");
 const mongoURI = require("./config").MONGODB_URI;
 const app = express();
 
-const options = {
-  server: { socketOptions: { keepAlive: 300000, connectTimeoutMS: 30000 } },
-  replset: { socketOptions: { keepAlive: 300000, connectTimeoutMS: 30000 } }
-};
-
 mongoose.connect(mongoURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
